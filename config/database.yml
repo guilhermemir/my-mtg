@@ -24,7 +24,7 @@ default: &default
 development:
   <<: *default
   database: my_mtg_development
-  host: localhost
+  host: winhost
   username: postgres
   password: postgres
 
@@ -61,7 +61,7 @@ development:
 test:
   <<: *default
   database: my_mtg_test
-  host: localhost
+  host: winhost
   username: postgres
   password: postgres
 
