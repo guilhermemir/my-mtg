@@ -87,6 +87,4 @@ test:
 #
 production:
   <<: *default
-  database: my_mtg_production
-  username: my_mtg
-  password: <%= ENV["MY_MTG_DATABASE_PASSWORD"] %>
+  url: <%= ENV['DATABASE_URL'] %>
