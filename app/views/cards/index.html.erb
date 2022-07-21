@@ -1,0 +1,21 @@
+<h1>Minhas Cartas</h1>
+
+<style>
+  .mtg-card {
+    width: 260px;
+    margin: 10px;
+    display: inline-block;
+  }
+</style>
+
+<%= form_with url: cards_path, method: :post, local: true, data: { turbo: false } do |form| %>
+  <%= form.label :name, "Nome da Carta:" %>
+  <%= form.text_field :name %>
+  <%= form.submit "Adicionar" %>
+<% end %>
+
+<p>
+  <% @cards.each do |card| %>
+    <%= link_to(image_tag(card.image_url, class: "mtg-card", alt: card.name, title: card.name), card.scryfall_url) %>
+  <% end %>
+</p>

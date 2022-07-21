@@ -12,3 +12,9 @@ def find_image(id)
 
   card["image_uris"]["large"]
 end
+
+# Cards
+# - id
+# - scryfall_id
+# - user_id
+# - quantity

@@ -1,5 +1,7 @@
 <h1>Home</h1>
 <p>Bem-vindo ao clube, <%= @current_user.name %> (<%= @current_user.email %>)!</p>
+<p><%= link_to "Usuários", users_path %></p>
+<p><%= link_to "Cartas", cards_path %></p>
 
 <p>
     <%= button_to "Logout", logout_path, method: :delete, local: true, data: { turbo: false} %>

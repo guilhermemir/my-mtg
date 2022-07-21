@@ -4,4 +4,6 @@ class User < ApplicationRecord
                     uniqueness: true,
                     format: { with: /@/,
                               message: "must be valid" }
+
+  has_many :cards
 end
