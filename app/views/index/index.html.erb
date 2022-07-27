@@ -1,9 +1,26 @@
-<h1>Index</h1>
+<div class="px-4 pt-5 mt-5 text-center border-bottom">
+  <h1 class="display-4 fw-bold">My MTG</h1>
+  <div class="col-lg-6 mx-auto">
+    <p class="lead mb-4">Ferramenta para gerenciar sua coleção de Magic: The Gathering.</p>
+    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
+      <%= link_to "Entrar", login_path, class: "btn btn-primary btn-lg px-4 me-sm-3" %>
+      <%= link_to "Cadastro", login_path, class: "btn btn-outline-secondary btn-lg px-4 me-sm-3" %>
+    </div>
+  </div>
+  <div class="overflow-hidden" style="max-height: 30vh;">
+    <div class="container px-5">
+      <img src="https://getbootstrap.com/docs/5.2/examples/heroes/bootstrap-docs.png" class="img-fluid border rounded-3 shadow-lg mb-4" alt="logo_my-mtg" width="700" height="500" loading="lazy">
+    </div>
+  </div>
+</div>
 
-<p>
-    <%= link_to "Login", login_path %>
-</p>
+<div class="container-fluid">
+  <footer class="d-flex flex-wrap justify-content-between align-items-center">
+    <p class="col-md-4 mb-0 text-muted">© <%= Time.now.year %> Guilherme Mir, Inc</p>
 
-<p>
-    <%= link_to "Entre em contato", contact_path %>
-</p>
+    <ul class="nav col-md-4 justify-content-end">
+      <li class="nav-item"><%= link_to "Home", root_path, class: "nav-link px-2 text-muted" %></li>
+      <li class="nav-item"><%= link_to "Contato", contact_path, class: "nav-link px-2 text-muted" %></li>
+    </ul>
+  </footer>
+</div>
