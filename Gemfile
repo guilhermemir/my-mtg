@@ -30,6 +30,9 @@ gem "jbuilder"
 # http
 gem "http"
 
+# bcrypt
+gem "bcrypt"
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 

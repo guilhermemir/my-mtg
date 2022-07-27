@@ -21,8 +21,7 @@ class Card < ApplicationRecord
     card["id"]
   end
 
-  protected
-
+  # Loads the card from Scryfall.
   def scryfall
     return @scryfall if @scryfall.present?
 

@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
   def create
     user = User.find_by(email: params[:email])
 
-    if user && params[:password] == "a"
+    if user && user.password == params[:password]
       session[:user_id] = user.id
       redirect_to home_path, notice: "Bem-vindo."
     else
