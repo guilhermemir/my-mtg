@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   resources :users
   resources :cards, only: [:index, :create, :update, :destroy]
 
+  get "cards/search", to: "cards#search"
+
   get "contact", to: "index#contact"
 
   # Defines the root path route ("/")
