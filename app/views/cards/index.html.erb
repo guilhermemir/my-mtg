@@ -1,21 +1,48 @@
-<h1>Minhas Cartas</h1>
+<div class="container">
+  <h1>Minhas Cartas</h1>
 
-<style>
-  .mtg-card {
-    width: 260px;
-    margin: 10px;
-    display: inline-block;
-  }
-</style>
+  <div class="row">
+    <%= form_with url: cards_path, method: :post, local: true, data: { turbo: false } do |form| %>
+      <%= form.label :name, "Nome da Carta:", label: "form-label" %>
+      <%= form.text_field :name, class: "form-control" %>
+      <%= form.submit "Adicionar", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>
 
-<%= form_with url: cards_path, method: :post, local: true, data: { turbo: false } do |form| %>
-  <%= form.label :name, "Nome da Carta:" %>
-  <%= form.text_field :name %>
-  <%= form.submit "Adicionar" %>
-<% end %>
-
-<p>
-  <% @cards.each do |card| %>
-    <%= link_to(image_tag(card.image_url, class: "mtg-card", alt: card.name, title: card.name), card.scryfall_url) %>
-  <% end %>
-</p>
+<div class="container">
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-2">
+    <% @cards.each do |card| %>
+      <div class="col">
+        <div class="card shadow-sm">
+          <%= image_tag(card.image_url, class: "card-img-top", alt: card.name, title: card.name) %>
+          <div class="card-body">
+            <p class="card-text">
+              <%= card.name %>
+              <%= link_to "Scryfall", card.scryfall_url %>
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <%= form_with model: card do |form| %>
+                <%= form.text_field :quantity, class: "form-control form-control-sm" %>
+                <%= form.submit class: "btn btn-sm btn-primary" %>
+              <% end %>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <%= form_with model: card do |form| %>
+                  <%= form.hidden_field :delta, value: "1" %>
+                  <%= form.submit "+", class: "btn btn-sm btn-outline-secondary" %>
+                <% end %>
+                <%= form_with model: card do |form| %>
+                  <%= form.hidden_field :delta, value: "-1" %>
+                  <%= form.submit "-", class: "btn btn-sm btn-outline-secondary" %>
+                <% end %>
+                <%= button_to "0", card_path(card), method: :delete, class: "btn btn-sm btn-outline-secondary" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -36,6 +36,10 @@ gem "bcrypt"
 # Bootstrap (framework CSS)
 gem "bootstrap"
 
+# Redis (cache)
+gem "redis"
+gem "hiredis"
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 

@@ -25,8 +25,10 @@ class Card < ApplicationRecord
   def scryfall
     return @scryfall if @scryfall.present?
 
-    r = HTTP.get("https://api.scryfall.com/cards/#{scryfall_id}")
-    @scryfall = JSON.parse(r.to_s)
+    @scryfall = Rails.cache.fetch("scryfall/cards/#{scryfall_id}", expires_in: 1.day) do
+      r = HTTP.get("https://api.scryfall.com/cards/#{scryfall_id}")
+      JSON.parse(r.to_s)
+    end
 
     return @scryfall
   end

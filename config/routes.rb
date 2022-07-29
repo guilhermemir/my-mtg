@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   delete "logout", to: "sessions#destroy"
 
   resources :users
-  resources :cards, only: [:index, :create]
+  resources :cards, only: [:index, :create, :update, :destroy]
 
   get "contact", to: "index#contact"
 
