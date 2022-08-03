@@ -1,37 +1,42 @@
 class CardsController < ApplicationController
   before_action :require_login
 
+  skip_before_action :verify_authenticity_token
+
   # GET /cards: lista todos os cards do usuário
   def index
-    @cards = current_user.cards
+    @cards = current_user.cards.order(created_at: :desc)
+
+    respond_to do |format|
+      format.html # app/views/cards/index.html.erb
+      format.json # app/views/cards/index.json.jbuilder
+    end
   end
 
   def search
-    name = params[:name]
+    @search_results = Card.scryfall_find_all_by_name(params[:name])
 
-    encoded_name = ERB::Util.url_encode(name)
-    r = HTTP.get("https://api.scryfall.com/cards/search?unique=prints&order=released&q=#{encoded_name}")
-    search_result = JSON.parse(r.to_s)
-
-    filtered_cards = search_result["data"].map do |c|
-      {
-        id: c["id"],
-        name: "#{c["name"]} (#{c["set_name"]}, ##{c["collector_number"]})",
-      }
+    respond_to do |format|
+      format.html do
+        index
+        render template: "cards/index"
+      end
+      format.json # app/views/cards/search.json.jbuilder
     end
-
-    render json: filtered_cards
   end
 
   # POST /cards: cria um novo card
   def create
-    id = Card.scryfall_find_by_name(params[:name])
+    id = params[:scryfall_id]
 
     if id.present?
       current_user.cards.create!(quantity: 1, scryfall_id: id)
     end
 
-    redirect_to cards_path
+    respond_to do |format|
+      format.html { redirect_to cards_path }
+      format.json { render json: { status: "ok" } }
+    end
   end
 
   def update
@@ -45,7 +50,10 @@ class CardsController < ApplicationController
     end
     card.update!(quantity: quantity)
 
-    redirect_to cards_path
+    respond_to do |format|
+      format.html { redirect_to cards_path }
+      format.json { render json: { status: "ok" } }
+    end
   end
 
   # DELETE /cards/:id: deleta um card
@@ -53,7 +61,10 @@ class CardsController < ApplicationController
     card = current_user.cards.find(params[:id])
     card.destroy
 
-    redirect_to cards_path
+    respond_to do |format|
+      format.html { redirect_to cards_path }
+      format.json { render json: { status: "ok" } }
+    end
   end
 end
 
