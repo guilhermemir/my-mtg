@@ -29,13 +29,16 @@
 <div class="container">
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-2">
     <% @cards.each do |card| %>
-      <div class="col">
+      <div class="col" id="card-<%= card.id %>">
         <div class="card shadow-sm">
           <%= image_tag(card.image_url, class: "card-img-top", alt: card.name, title: card.name) %>
           <div class="card-body">
             <p class="card-text">
               <%= card.name %>
-              <%= link_to "Scryfall", card.scryfall_url %>
+              <small>
+                <%= link_to "Scryfall", card.scryfall_url %>
+                <%= link_to "JSON", card.scryfall_api_url %>
+              </small>
             </p>
             <div class="d-flex justify-content-between align-items-center">
               <%= form_with model: card do |form| %>
@@ -53,7 +56,8 @@
                   <%= form.hidden_field :delta, value: "-1" %>
                   <%= form.submit "-", class: "btn btn-sm btn-outline-secondary" %>
                 <% end %>
-                <%= button_to "0", card_path(card), method: :delete, class: "btn btn-sm btn-outline-secondary" %>
+                <!-- <%= button_to "0", card_path(card), method: :delete, class: "btn btn-sm btn-outline-secondary" %> -->
+                <a href="#" data-card-id="<%= card.id %>" class="btn btn-sm btn-outline-secondary mymtg-card-delete">0</a>
               </div>
             </div>
           </div>
@@ -62,3 +66,58 @@
     <% end %>
   </div>
 </div>
+
+<script>
+  // asks backend to delete card from database
+  function deleteCard(id) {
+    let xhr = new XMLHttpRequest()
+    xhr.open('DELETE', `/cards/${id}.json`, true)
+    xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8')
+    xhr.onload = function () {
+      console.log(xhr.responseText)
+    }
+    xhr.send(null)
+  }
+
+  function addCard(scryfallId) {
+    let xhr = new XMLHttpRequest()
+    xhr.open('POST', '/cards.json', true)
+    xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8')
+    xhr.onload = function () {
+      let result = JSON.parse(xhr.responseText);
+      if (xhr.readyState == 4 && xhr.status == "200") {
+        console.table(result);
+      } else {
+        console.error(result);
+      }
+    }
+
+    let data = {}
+    data.scryfall_id = scryfallId
+
+    let json = JSON.stringify(data)
+
+    xhr.send(json)
+  }
+
+  document.addEventListener("DOMContentLoaded", function() { 
+    document.querySelectorAll(".mymtg-card-delete").forEach(function(el) {
+      el.addEventListener("click", function(e) {
+        e.preventDefault()
+        let cardId = el.dataset.cardId
+        deleteCard(cardId)
+
+        let cardElement = document.getElementById(`card-${cardId}`)
+        cardElement.parentNode.removeChild(cardElement)
+      })
+    })
+  })
+</script>
+
+<!--
+1. Arrumar erro com "removeChild"
+2. Fazer busca em JavaScript.
+3. Fazer o atualizar numero de cards.
+4. Fazer o "+" e o "-" numero de cards.
+5. Implementar Hotwire ao invés de JavaScript vanilla.
+-->
