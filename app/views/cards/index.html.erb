@@ -1,71 +1,75 @@
-<div class="container">
-  <h1>Minhas Cartas</h1>
-</div>
-
-<div class="container">
-  <div class="row">
-    <h2>Adicionar Carta</h2>
-    <%= form_with url: cards_search_path, method: :get, local: true, data: { turbo: false } do |form| %>
-      <%= form.text_field :name, class: "form-control" %>
-      <%= form.submit "Buscar", class: "btn btn-primary" %>
-    <% end %>
-  </div>
-  <% if @search_results.present? %>
+<div class="px-4 py-5 border-bottom">
+  <div class="container">
+    <h1 class="display-4">Minhas Cartas</h1>
     <div class="row">
-      <ul>
-        <% @search_results.each do |card| %>
-          <li>
-            <%= form_with url: cards_path, method: :post, local: true, data: { turbo: false } do |form| %>
-              <%= form.hidden_field :scryfall_id, value: card[:id] %>
-              <%= form.submit card[:name], class: "btn" %>
-            <% end %>
-          </li>
+      <h2 class="lead">Adicionar Carta</h2>
+      <div class="py-2">
+        <%= form_with url: cards_search_path, method: :get, local: true, data: { turbo: false } do |form| %>
+          <div class="pb-2 col-md-4">
+            <%= form.text_field :name, class: "form-control shadow-lg" %>
+          </div>
+          <%= form.submit "Buscar", class: "btn btn-primary" %>
         <% end %>
-      </ul>
+      </div>
     </div>
-  <% end %>
-</div>
 
-<div class="container">
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-2">
-    <% @cards.each do |card| %>
-      <div class="col" id="card-<%= card.id %>">
-        <div class="card shadow-sm">
-          <%= image_tag(card.image_url, class: "card-img-top", alt: card.name, title: card.name) %>
-          <div class="card-body">
-            <p class="card-text">
-              <%= card.name %>
-              <small>
-                <%= link_to "Scryfall", card.scryfall_url %>
-                <%= link_to "JSON", card.scryfall_api_url %>
-              </small>
-            </p>
-            <div class="d-flex justify-content-between align-items-center">
-              <%= form_with model: card do |form| %>
-                <%= form.text_field :quantity, class: "form-control form-control-sm" %>
-                <%= form.submit class: "btn btn-sm btn-primary" %>
+    <% if @search_results.present? %>
+      <div class="row">
+        <ul>
+          <% @search_results.each do |card| %>
+            <li>
+              <%= form_with url: cards_path, method: :post, local: true, data: { turbo: false } do |form| %>
+                <%= form.hidden_field :scryfall_id, value: card[:id] %>
+                <%= form.submit card[:name], class: "btn" %>
               <% end %>
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="btn-group">
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-2">
+      <% @cards.each do |card| %>
+        <div class="col" id="card-<%= card.id %>">
+          <div class="card shadow-sm">
+            <%= image_tag(card.image_url, class: "card-img-top", alt: card.name, title: card.name) %>
+            <div class="card-body">
+              <p class="card-text">
+                <%= card.name %>
+                <small>
+                  <%= link_to "Scryfall", card.scryfall_url %>
+                  <%= link_to "JSON", card.scryfall_api_url %>
+                </small>
+              </p>
+              <div class="d-flex justify-content-between align-items-center">
                 <%= form_with model: card do |form| %>
-                  <%= form.hidden_field :delta, value: "1" %>
-                  <%= form.submit "+", class: "btn btn-sm btn-outline-secondary" %>
+                  <%= form.text_field :quantity, class: "form-control form-control-sm" %>
+                  <%= form.submit class: "btn btn-sm btn-primary" %>
                 <% end %>
-                <%= form_with model: card do |form| %>
-                  <%= form.hidden_field :delta, value: "-1" %>
-                  <%= form.submit "-", class: "btn btn-sm btn-outline-secondary" %>
-                <% end %>
-                <!-- <%= button_to "0", card_path(card), method: :delete, class: "btn btn-sm btn-outline-secondary" %> -->
-                <a href="#" data-card-id="<%= card.id %>" class="btn btn-sm btn-outline-secondary mymtg-card-delete">0</a>
+              </div>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <%= form_with model: card do |form| %>
+                    <%= form.hidden_field :delta, value: "1" %>
+                    <%= form.submit "+", class: "btn btn-sm btn-outline-secondary" %>
+                  <% end %>
+                  <%= form_with model: card do |form| %>
+                    <%= form.hidden_field :delta, value: "-1" %>
+                    <%= form.submit "-", class: "btn btn-sm btn-outline-secondary" %>
+                  <% end %>
+                  <!-- <%= button_to "0", card_path(card), method: :delete, class: "btn btn-sm btn-outline-secondary" %> -->
+                  <a href="#" data-card-id="<%= card.id %>" class="btn btn-sm btn-outline-secondary mymtg-card-delete">0</a>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    <% end %>
+      <% end %>
+    </div>
   </div>
 </div>
+
+<%= render partial: "shared/footer" %>
 
 <script>
   // asks backend to delete card from database
