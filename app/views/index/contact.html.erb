@@ -1,9 +1,48 @@
-<h1>Contact</h1>
+<div class="px-4 pt-5 mt-5 border-bottom">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="row align-items-center">
+                <div class="col-lg-7 mb-5 mb-lg-0">
+                    <h2 class="mb-3">Envie sua mensagem</h2>
+                    <form class="border-right pr-5 mb-5" method="post" id="contactForm" name="contactForm" novalidate="novalidate">
+                        <div class="row pb-1">
+                            <div class="col-md-10 form-group">
+                                <input type="text" class="form-control shadow-lg" name="name" placeholder="Nome completo">
+                            </div>
+                        </div>
+                        <div class="row pb-1">
+                            <div class="col-md-10 form-group">
+                                <input type="email" class="form-control shadow-lg" name="email" placeholder="E-mail">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-10 form-group">
+                                <textarea class="form-control shadow-lg" rows="7" name="message" placeholder="Escreva sua mensagem"></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mt-1">
+                                <input type="submit" value="Enviar" class="btn btn-primary btn-lg px-4 me-sm-3">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-4 ml-auto">
+                    <h3 class="mb-4">Entre em contato</h3>
+                    <p class="lead mb-4">Deixe seu feedback, faça uma pergunta, ou peça ajuda ao time do My MTG.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<p>
-    Lorem ipsum dolor siamet dolor sit amet, consectetur adipiscing elit.
-</p>
-
-<p>
-    <%= link_to "Home", root_path %>
-</p>
+<div class="container-fluid">
+    <footer class="d-flex flex-wrap justify-content-between align-items-center pt-2">
+        <p class="col-md-4 mb-0 text-muted">© <%= Time.now.year %> Guilherme Mir, Inc</p>
+        <img src="<%= asset_path('my-mtg-logo.png') %>" alt="Logo - My MTG" height="50px">
+        <ul class="nav col-md-4 justify-content-end">
+            <li class="nav-item"><%= link_to "Home", root_path, class: "nav-link px-2 text-muted" %></li>
+            <li class="nav-item"><%= link_to "Contato", contact_path, class: "nav-link px-2 text-muted" %></li>
+        </ul>
+    </footer>
+</div>

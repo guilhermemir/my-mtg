@@ -5,5 +5,6 @@ class IndexController < ApplicationController
   end
 
   def contact
+    @title = "Contato"
   end
 end

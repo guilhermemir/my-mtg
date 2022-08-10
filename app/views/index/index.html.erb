@@ -9,18 +9,19 @@
   </div>
   <div class="overflow-hidden" style="max-height: 30vh;">
     <div class="container px-5">
-      <img src="https://getbootstrap.com/docs/5.2/examples/heroes/bootstrap-docs.png" class="img-fluid border rounded-3 shadow-lg mb-4" alt="logo_my-mtg" width="700" height="500" loading="lazy">
+      <img src="<%= asset_path('landing-banner.png') %>" alt="My MTG - Banner" class="img-fluid border rounded-3 shadow-lg mb-4" width="700" height="500" loading="lazy">
+      
     </div>
   </div>
 </div>
 
 <div class="container-fluid">
-  <footer class="d-flex flex-wrap justify-content-between align-items-center">
-    <p class="col-md-4 mb-0 text-muted">© <%= Time.now.year %> Guilherme Mir, Inc</p>
-
-    <ul class="nav col-md-4 justify-content-end">
-      <li class="nav-item"><%= link_to "Home", root_path, class: "nav-link px-2 text-muted" %></li>
-      <li class="nav-item"><%= link_to "Contato", contact_path, class: "nav-link px-2 text-muted" %></li>
-    </ul>
-  </footer>
+    <footer class="d-flex flex-wrap justify-content-between align-items-center pt-2">
+        <p class="col-md-4 mb-0 text-muted">© <%= Time.now.year %> Guilherme Mir, Inc</p>
+        <img src="<%= asset_path('my-mtg-logo.png') %>" alt="Logo - My MTG" height="50px">
+        <ul class="nav col-md-4 justify-content-end">
+            <li class="nav-item"><%= link_to "Home", root_path, class: "nav-link px-2 text-muted" %></li>
+            <li class="nav-item"><%= link_to "Contato", contact_path, class: "nav-link px-2 text-muted" %></li>
+        </ul>
+    </footer>
 </div>
