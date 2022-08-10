@@ -14,9 +14,17 @@ class CardsController < ApplicationController
   end
 
   def search
-    @search_results = Card.scryfall_find_all_by_name(params[:name])
+    @results = []
+    if params[:name].present? && params[:name].length > 5
+      @results = Card.scryfall_find_all_by_name(params[:name])
+    end
 
     respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.update("results", partial: "search", locals: { query: params[:name], results: @results }),
+        ]
+      end
       format.html do
         index
         render template: "cards/index"
@@ -28,12 +36,14 @@ class CardsController < ApplicationController
   # POST /cards: cria um novo card
   def create
     id = params[:scryfall_id]
-
-    if id.present?
-      current_user.cards.create!(quantity: 1, scryfall_id: id)
-    end
+    card = current_user.cards.create!(quantity: 1, scryfall_id: id)
 
     respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.prepend("cards", card),
+        ]
+      end
       format.html { redirect_to cards_path }
       format.json { render json: { status: "ok" } }
     end
@@ -51,6 +61,11 @@ class CardsController < ApplicationController
     card.update!(quantity: quantity)
 
     respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.update(card),
+        ]
+      end
       format.html { redirect_to cards_path }
       format.json { render json: { status: "ok" } }
     end
@@ -62,6 +77,11 @@ class CardsController < ApplicationController
     card.destroy
 
     respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.remove(card),
+        ]
+      end
       format.html { redirect_to cards_path }
       format.json { render json: { status: "ok" } }
     end

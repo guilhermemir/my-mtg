@@ -1,127 +1,25 @@
 <div class="px-4 py-5 border-bottom">
   <div class="container">
     <h1 class="display-4">Minhas Cartas</h1>
+
     <div class="row">
-      <h2 class="lead">Adicionar Carta</h2>
       <div class="py-2">
-        <%= form_with url: cards_search_path, method: :get, local: true, data: { turbo: false } do |form| %>
+        <%= form_with url: search_cards_path, method: :post, data: { controller: 'debounce', debounce_target: 'form' } do |form| %>
           <div class="pb-2 col-md-4">
-            <%= form.text_field :name, class: "form-control shadow-lg" %>
+            <%= form.text_field :name, class: "form-control shadow-lg", placeholder: "Digite o nome da carta para buscar", data: { action: 'input->debounce#search' } %>
           </div>
-          <%= form.submit "Buscar", class: "btn btn-primary" %>
         <% end %>
       </div>
     </div>
 
-    <% if @search_results.present? %>
-      <div class="row">
-        <ul>
-          <% @search_results.each do |card| %>
-            <li>
-              <%= form_with url: cards_path, method: :post, local: true, data: { turbo: false } do |form| %>
-                <%= form.hidden_field :scryfall_id, value: card[:id] %>
-                <%= form.submit card[:name], class: "btn" %>
-              <% end %>
-            </li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
+    <div id="results"></div>
 
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-2">
+    <div id="cards" class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-2">
       <% @cards.each do |card| %>
-        <div class="col" id="card-<%= card.id %>">
-          <div class="card shadow-sm">
-            <%= image_tag(card.image_url, class: "card-img-top", alt: card.name, title: card.name) %>
-            <div class="card-body">
-              <p class="card-text">
-                <%= card.name %>
-                <small>
-                  <%= link_to "Scryfall", card.scryfall_url %>
-                  <%= link_to "JSON", card.scryfall_api_url %>
-                </small>
-              </p>
-              <div class="d-flex justify-content-between align-items-center">
-                <%= form_with model: card do |form| %>
-                  <%= form.text_field :quantity, class: "form-control form-control-sm" %>
-                  <%= form.submit class: "btn btn-sm btn-primary" %>
-                <% end %>
-              </div>
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <%= form_with model: card do |form| %>
-                    <%= form.hidden_field :delta, value: "1" %>
-                    <%= form.submit "+", class: "btn btn-sm btn-outline-secondary" %>
-                  <% end %>
-                  <%= form_with model: card do |form| %>
-                    <%= form.hidden_field :delta, value: "-1" %>
-                    <%= form.submit "-", class: "btn btn-sm btn-outline-secondary" %>
-                  <% end %>
-                  <!-- <%= button_to "0", card_path(card), method: :delete, class: "btn btn-sm btn-outline-secondary" %> -->
-                  <a href="#" data-card-id="<%= card.id %>" class="btn btn-sm btn-outline-secondary mymtg-card-delete">0</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <%= render card %> 
       <% end %>
     </div>
   </div>
 </div>
 
 <%= render partial: "shared/footer" %>
-
-<script>
-  // asks backend to delete card from database
-  function deleteCard(id) {
-    let xhr = new XMLHttpRequest()
-    xhr.open('DELETE', `/cards/${id}.json`, true)
-    xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8')
-    xhr.onload = function () {
-      console.log(xhr.responseText)
-    }
-    xhr.send(null)
-  }
-
-  function addCard(scryfallId) {
-    let xhr = new XMLHttpRequest()
-    xhr.open('POST', '/cards.json', true)
-    xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8')
-    xhr.onload = function () {
-      let result = JSON.parse(xhr.responseText);
-      if (xhr.readyState == 4 && xhr.status == "200") {
-        console.table(result);
-      } else {
-        console.error(result);
-      }
-    }
-
-    let data = {}
-    data.scryfall_id = scryfallId
-
-    let json = JSON.stringify(data)
-
-    xhr.send(json)
-  }
-
-  document.addEventListener("DOMContentLoaded", function() { 
-    document.querySelectorAll(".mymtg-card-delete").forEach(function(el) {
-      el.addEventListener("click", function(e) {
-        e.preventDefault()
-        let cardId = el.dataset.cardId
-        deleteCard(cardId)
-
-        let cardElement = document.getElementById(`card-${cardId}`)
-        cardElement.parentNode.removeChild(cardElement)
-      })
-    })
-  })
-</script>
-
-<!--
-1. Arrumar erro com "removeChild"
-2. Fazer busca em JavaScript.
-3. Fazer o atualizar numero de cards.
-4. Fazer o "+" e o "-" numero de cards.
-5. Implementar Hotwire ao invés de JavaScript vanilla.
--->

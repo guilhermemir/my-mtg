@@ -1,0 +1,20 @@
+<div class="row">
+  <p>
+    <%= results.count %> cartas encontradas.
+  </p>
+</div>
+
+<% if @results.present? %>
+  <div class="row">
+    <ul>
+      <% @results.each do |card| %>
+        <li>
+          <%= form_with url: cards_path, method: :post, data: { controller: 'search', search_target: 'form', action: 'submit->search#pick' } do |form| %>
+            <%= form.hidden_field :scryfall_id, value: card[:id] %>
+            <%= form.submit highlight(card[:name], query), class: "btn" %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
