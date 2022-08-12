@@ -8,7 +8,7 @@
       <div class="py-2">
         <%= form_with url: search_cards_path, method: :post, data: { controller: 'debounce', debounce_target: 'form' } do |form| %>
           <div class="pb-2 col-md-4">
-            <%= form.text_field :name, class: "form-control shadow-lg", placeholder: "Digite o nome da carta para buscar", data: { action: 'input->debounce#search' } %>
+            <%= form.text_field :query, class: "form-control shadow-lg", placeholder: "Digite o nome da carta para buscar", data: { action: 'input->debounce#search' } %>
           </div>
         <% end %>
       </div>

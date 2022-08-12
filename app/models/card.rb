@@ -44,6 +44,7 @@ class Card < ApplicationRecord
       JSON.parse(r.to_s)
     end
 
+    return [] if search_result["data"].blank?
     cards = search_result["data"].
       # select { |c| (c["printed_name"].presence || c["name"]).to_s.match(name) }.
       map do |c|

@@ -15,14 +15,16 @@ class CardsController < ApplicationController
 
   def search
     @results = []
-    if params[:name].present? && params[:name].length > 5
-      @results = Card.scryfall_find_all_by_name(params[:name])
+
+    @query = params[:query].strip
+    if @query.present? && @query.length >= 3
+      @results = Card.scryfall_find_all_by_name(@query)
     end
 
     respond_to do |format|
       format.turbo_stream do
         render turbo_stream: [
-          turbo_stream.update("results", partial: "search", locals: { query: params[:name], results: @results }),
+          turbo_stream.update("results", partial: "search", locals: { query: @query, results: @results }),
         ]
       end
     end
