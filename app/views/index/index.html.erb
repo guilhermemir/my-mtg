@@ -15,13 +15,4 @@
   </div>
 </div>
 
-<div class="container-fluid">
-    <footer class="d-flex flex-wrap justify-content-between align-items-center pt-2">
-        <p class="col-md-4 mb-0 text-muted">© <%= Time.now.year %> Guilherme Mir, Inc</p>
-        <img src="<%= asset_path('my-mtg-logo.png') %>" alt="Logo - My MTG" height="50px">
-        <ul class="nav col-md-4 justify-content-end">
-            <li class="nav-item"><%= link_to "Home", root_path, class: "nav-link px-2 text-muted" %></li>
-            <li class="nav-item"><%= link_to "Contato", contact_path, class: "nav-link px-2 text-muted" %></li>
-        </ul>
-    </footer>
-</div>
+<%= render partial: "shared/footer" %>
