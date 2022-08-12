@@ -25,11 +25,6 @@ class CardsController < ApplicationController
           turbo_stream.update("results", partial: "search", locals: { query: params[:name], results: @results }),
         ]
       end
-      format.html do
-        index
-        render template: "cards/index"
-      end
-      format.json # app/views/cards/search.json.jbuilder
     end
   end
 
@@ -44,8 +39,6 @@ class CardsController < ApplicationController
           turbo_stream.prepend("cards", card),
         ]
       end
-      format.html { redirect_to cards_path }
-      format.json { render json: { status: "ok" } }
     end
   end
 
@@ -66,8 +59,6 @@ class CardsController < ApplicationController
           turbo_stream.update(card),
         ]
       end
-      format.html { redirect_to cards_path }
-      format.json { render json: { status: "ok" } }
     end
   end
 
@@ -82,13 +73,6 @@ class CardsController < ApplicationController
           turbo_stream.remove(card),
         ]
       end
-      format.html { redirect_to cards_path }
-      format.json { render json: { status: "ok" } }
     end
   end
 end
-
-# GET    /cards: CardsController#index (lista todos os cards)
-# POST   /cards: CardsController#create (cria um novo card) -- hoje em dia recebe um `params[:name]`, trocar por `params[:scryfall_id]`
-# DELETE /cards/:id: CardsController#destroy (deleta um "conjuntinho de card")
-# PATCH  /cards/:id: CardsController#update (atualiza um card) -- so queremos mudar a quantidade

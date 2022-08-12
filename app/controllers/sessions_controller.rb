@@ -1,9 +1,11 @@
 class SessionsController < ApplicationController
   before_action :redirect_if_logged_in, only: [:new]
 
+  # GET /session: Formulário de login
   def new
   end
 
+  # POST /session: Autentica o usuário, redireciona para a página inicial (home)
   def create
     user = User.find_by(email: params[:email])
 
@@ -15,6 +17,7 @@ class SessionsController < ApplicationController
     end
   end
 
+  # DELETE /session: Destrói a sessão do usuário (desloga)
   def destroy
     session[:user_id] = nil
     redirect_to root_path, notice: "Você saiu."

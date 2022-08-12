@@ -1,10 +1,15 @@
 <% content_for :title do %>Home<% end %>
 
-<h1>Home</h1>
-<p>Bem-vindo ao clube, <%= @current_user.name %> (<%= @current_user.email %>)!</p>
-<p><%= link_to "Usuários", users_path %></p>
-<p><%= link_to "Cartas", cards_path %></p>
+<div class="px-4 pt-5 mt-5">
+    <div class="row">
+        <p>Bem-vindo ao clube, <%= @current_user.name %> (<%= @current_user.email %>)!</p>
+        <p><%= link_to "Cartas", cards_path, class: "btn btn-primary" %></p>
+        <p><%= link_to "Usuários", users_path, class: "btn" %></p>
 
-<p>
-    <%= button_to "Logout", logout_path, method: :delete, local: true, data: { turbo: false} %>
-</p>
+        <p>
+            <%= button_to "Logout", logout_path, method: :delete, local: true, data: { turbo: false}, class: "btn btn-secondary" %>
+        </p>
+    </div>
+</div>
+
+<%= render partial: "shared/footer" %>
