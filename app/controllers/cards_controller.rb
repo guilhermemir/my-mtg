@@ -24,7 +24,7 @@ class CardsController < ApplicationController
     respond_to do |format|
       format.turbo_stream do
         render turbo_stream: [
-          turbo_stream.update("results", partial: "search", locals: { query: @query, results: @results }),
+          turbo_stream.update("resultsBlock", partial: "search", locals: { query: @query, results: @results }),
         ]
       end
     end

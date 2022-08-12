@@ -1,12 +1,16 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["form"]
+  static targets = ["resultsBlock", "forms"]
 
-  pick() {
-    this.formTarget.requestSubmit()
+  pick(event) {
+    event.preventDefault()
 
-    let results = document.getElementById("results")
-    results.innerHTML = ""
+    // Submete form para selecionar o resultado (escolher o card)
+    let form = this.formsTargets.find(el => el.id === event.params.formId)
+    form.requestSubmit()
+
+    // Apaga lista de resultados da tela
+    this.resultsBlockTarget.innerHTML = ""
   }
 }

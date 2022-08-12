@@ -6,12 +6,16 @@
   </div>
 
   <div class="row">
-    <ul>
+    <ul class="">
       <% @results.each do |card| %>
         <li>
-          <%= form_with url: cards_path, method: :post, data: { controller: 'search-result', search_result_target: 'form', action: 'submit->search-result#pick' } do |form| %>
-            <%= form.hidden_field :scryfall_id, value: card[:id] %>
-            <%= form.submit highlight(card[:name], query), class: "btn" %>
+          <%= form_with url: cards_path, method: :post, data: { search_result_target: 'forms' }, id: "form-search-result-#{card.scryfall_id}" do |form| %>
+            <%= form.hidden_field :scryfall_id, value: card.scryfall_id %>
+            <%= form.submit class: "visually-hidden" %>
+            <%= link_to "#", class: "", data: { action: 'click->search-result#pick', search_result_form_id_param: "form-search-result-#{card.scryfall_id}" } do %>
+              <%= image_tag card.image_url, width: "71", height: "100" %>
+              <%= highlight(card.full_name, query, highlighter: '<strong>\1</strong>') %>
+            <% end %>
           <% end %>
         </li>
       <% end %>

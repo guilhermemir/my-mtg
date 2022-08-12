@@ -6,15 +6,15 @@
 
     <div class="row">
       <div class="py-2">
-        <%= form_with url: search_cards_path, method: :post, data: { controller: 'debounce', debounce_target: 'form' } do |form| %>
+        <%= form_with url: search_cards_path, method: :post, data: { controller: 'search', search_target: 'form' } do |form| %>
           <div class="pb-2 col-md-4">
-            <%= form.text_field :query, class: "form-control shadow-lg", placeholder: "Digite o nome da carta para buscar", data: { action: 'input->debounce#search' } %>
+            <%= form.text_field :query, class: "form-control shadow-lg", placeholder: "Digite o nome da carta para buscar", data: { action: 'input->search#search' } %>
           </div>
         <% end %>
       </div>
     </div>
 
-    <div id="results"></div>
+    <div id="resultsBlock" data-controller="search-result" data-search-result-target="resultsBlock"></div>
 
     <div id="cards" class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-2">
       <% @cards.each do |card| %>

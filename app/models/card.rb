@@ -5,6 +5,28 @@ class Card < ApplicationRecord
     scryfall["name"]
   end
 
+  def full_name
+    "#{printed_name} (#{set_name}, #{collector_number} － #{release_year})"
+  end
+
+  def printed_name
+    scryfall["printed_name"].presence || scryfall["name"]
+  end
+
+  def set_name
+    scryfall["set_name"]
+  end
+
+  def collector_number
+    "##{scryfall["collector_number"]}"
+  end
+
+  def release_year
+    return "" if scryfall["released_at"].blank?
+
+    scryfall["released_at"].split("-").first
+  end
+
   def image_url
     scryfall.dig("image_uris", "large").presence ||
       scryfall.dig("image_uris", "normal").presence ||
@@ -45,28 +67,25 @@ class Card < ApplicationRecord
     end
 
     return [] if search_result["data"].blank?
-    cards = search_result["data"].
-      # select { |c| (c["printed_name"].presence || c["name"]).to_s.match(name) }.
-      map do |c|
-      card_name = c["printed_name"].presence || c["name"]
-
-      {
-        id: c["id"],
-        name: "#{card_name} (#{c["set_name"]}, ##{c["collector_number"]})",
-      }
-    end
+    search_result["data"].map { |json| Card.new(scryfall_id: json["id"], scryfall: json) }
   end
 
   # Loads the card from Scryfall.
   def scryfall
     return @scryfall if @scryfall.present?
 
-    @scryfall = Rails.cache.fetch("scryfall/cards/#{scryfall_id}", expires_in: 1.day) do
+    @scryfall = Rails.cache.fetch("scryfall/cards/#{scryfall_id}", expires_in: 30.day) do
       Rails.logger.info "Calling Scryfall API: card for #{scryfall_id}"
       r = HTTP.get(scryfall_api_url)
       JSON.parse(r.to_s)
     end
 
     return @scryfall
+  end
+
+  def scryfall=(json)
+    @scryfall = Rails.cache.fetch("scryfall/cards/#{scryfall_id}", expires_in: 30.day) do
+      json
+    end
   end
 end
