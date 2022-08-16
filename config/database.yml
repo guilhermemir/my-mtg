@@ -24,7 +24,8 @@ default: &default
 development:
   <<: *default
   database: my_mtg_development
-  host: winhost
+  host: 127.0.0.1
+  port: 5432
   username: postgres
   password: postgres
 
@@ -61,7 +62,7 @@ development:
 test:
   <<: *default
   database: my_mtg_test
-  host: winhost
+  host: 127.0.0.1
   username: postgres
   password: postgres
 
